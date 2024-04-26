@@ -178,6 +178,7 @@ pub struct FrugInstance {
     camera_uniform: CameraUniform,
     camera_buffer: wgpu::Buffer,
     camera_bind_group: wgpu::BindGroup,
+    exit_requested: bool,
 }
 
 /// Implementation of FrugInstance methods
@@ -447,6 +448,7 @@ impl FrugInstance {
             camera_uniform,
             camera_buffer,
             camera_bind_group,
+            exit_requested: false,
         }
     }
 
@@ -540,6 +542,10 @@ impl FrugInstance {
             0,
             bytemuck::cast_slice(&[self.camera_uniform]),
         );
+    }
+
+    pub fn exit(&mut self) {
+        self.exit_requested = true;
     }
 
     /// Sets new background color.
@@ -834,6 +840,10 @@ impl FrugInstance {
                     self.window.request_redraw();
 
                     update_function(&mut self, &input);
+
+                    if self.exit_requested {
+                        *control_flow = ControlFlow::Exit;
+                    }
                 }
                 _ => (),
             }
