@@ -544,6 +544,7 @@ impl FrugInstance {
         );
     }
 
+    /// Signify that the event loop should be exited when next possible.
     pub fn exit(&mut self) {
         self.exit_requested = true;
     }
