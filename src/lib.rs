@@ -7,6 +7,7 @@ use cgmath::Matrix4;
 pub use winit::event::{KeyboardInput, VirtualKeyCode};
 pub use winit::event_loop::EventLoop;
 pub use winit_input_helper::WinitInputHelper as InputHelper;
+pub use wgpu::Color;
 
 // Internal use
 use wgpu::util::DeviceExt;
