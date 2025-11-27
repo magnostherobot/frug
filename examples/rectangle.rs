@@ -1,19 +1,29 @@
-use frug::FrugInstance;
-
-extern crate frug;
+use frug::{Color, Event, Instance, Keycode, Vec2d};
 
 fn main() {
-    let (frug_instance, event_loop) = frug::new("My Window");
+    let mut frug_instance = Instance::new("Spritesheet Example", 800, 600);
+    let background_color = Color::RGB(100, 100, 150);
 
-    let mut x = 0.0;
+    let rect_pos = Vec2d { x: 50, y: 50 };
+    let rect_size = Vec2d { x: 100, y: 70 };
 
-    let update_function = move |instance: &mut FrugInstance, _input: &frug::InputHelper| {
-        instance.clear();
-        instance.add_colored_rect(x, 0.0, 0.5, 0.5, [0.0, 0.5, 0.5]);
-        instance.update_buffers();
+    'running: loop {
+        // Input
+        for event in frug_instance.get_events() {
+            match event {
+                // Quit the application
+                Event::Quit { .. }
+                | Event::KeyDown {
+                    keycode: Some(Keycode::Escape),
+                    ..
+                } => break 'running,
+                _ => {}
+            }
+        }
 
-        x += 0.001;
-    };
-
-    frug_instance.run(event_loop, update_function);
+        // Render
+        frug_instance.clear(background_color);
+        frug_instance.draw_rect(&rect_pos, &rect_size, Color::RGB(255, 0, 0));
+        frug_instance.present();
+    }
 }
